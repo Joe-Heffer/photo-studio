@@ -61,5 +61,9 @@ and keeps unretouched pixels from the original.
 
 - `iopaint` pins `pillow==9.5.0`, which has no Python 3.12 wheels. `pyproject.toml`
   overrides the pin. IOPaint 1.6 works with current Pillow.
+- For security, `pyproject.toml` excludes `gradio`, which is only used by `iopaint start-web-config`,
+  and overrides iopaint's pins on `fastapi`, `starlette` and `python-socketio`. `diffusers` and
+  `transformers` stay on iopaint's old pins: iopaint imports their internals, and the LaMa path never
+  loads HF models. Their Dependabot alerts are dismissed for that reason.
 - PyTorch comes from the CPU wheel index; the toolkit is CPU-only by design (LaMa is fast enough
   without a GPU, and it avoids CUDA/ROCm setup).
