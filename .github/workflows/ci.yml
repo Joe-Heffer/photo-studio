@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v10
         with:
           enable-cache: true
 
@@ -26,7 +26,7 @@ jobs:
           for t in preview mask remove finalize; do uv run tools/$t.py --help > /dev/null; done
 
       - name: Cache LaMa model
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/torch/hub/checkpoints
           key: lama-${{ hashFiles('uv.lock') }}
