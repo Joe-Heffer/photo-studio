@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Compile and check CLIs
+        run: |
+          uv run python -m compileall -q tools tests
+          for t in preview mask remove finalize; do uv run tools/$t.py --help > /dev/null; done
+
+      - name: Cache LaMa model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/torch/hub/checkpoints
+          key: lama-${{ hashFiles('uv.lock') }}
+          restore-keys: lama-
+
+      - name: Download LaMa model
+        run: uv run iopaint download --model lama
+
+      - name: Smoke test
+        run: uv run python tests/smoke.py

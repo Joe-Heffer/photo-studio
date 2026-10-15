@@ -1,0 +1,26 @@
+[project]
+name = "photo-studio"
+version = "0.1.0"
+description = "Local object/blemish removal for JPEG photos using LaMa (IOPaint), CPU-only"
+requires-python = "==3.12.*"
+dependencies = [
+    "iopaint>=1.6",
+    "pillow>=10",
+    "numpy",
+    "torch",
+    "torchvision",
+]
+
+[tool.uv]
+package = false
+# iopaint pins pillow==9.5.0, which has no wheels for Python 3.12
+override-dependencies = ["pillow>=10"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

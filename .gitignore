@@ -1,0 +1,7 @@
+.venv/
+input/*
+output/*
+masks/*
+previews/*
+!*/.gitkeep
+__pycache__/
